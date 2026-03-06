@@ -1,0 +1,28 @@
+[project]
+name = "techroot-lesson-parser"
+version = "0.1.0"
+description = "A lesson parser for techroot app"
+readme = "README.md"
+authors = [
+    { name = "christianseyboth", email = "cseyboth@mailbox.org" }
+]
+requires-python = ">=3.14"
+dependencies = [
+    "markdown>=3.10.2",
+    "pyyaml>=6.0.3",
+]
+
+[build-system]
+requires = ["uv_build>=0.10.8,<0.11.0"]
+build-backend = "uv_build"
+
+[project.scripts]
+techroot-lesson-parser = "techroot_lesson_parser.cli:main"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[dependency-groups]
+dev = [
+    "pytest>=9.0.2",
+]
