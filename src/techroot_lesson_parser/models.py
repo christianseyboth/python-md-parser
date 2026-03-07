@@ -2,6 +2,10 @@ from dataclasses import dataclass, field
 from enum import Enum
 from pydoc import text
 
+""" Dataclasses and types for the parser-function
+    of creating chapter / step / lessons output
+                                                """
+
 
 class StepType(Enum):
     TEXT = "text"
