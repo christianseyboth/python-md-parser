@@ -1,5 +1,6 @@
 import yaml
 import shlex
+from error_classes import ParseError
 from techroot_lesson_parser.models import Chapter, Lesson, Step, StepType, ValidatorType
 
 
@@ -32,6 +33,12 @@ def parse_steps(body: str) -> list[Step]:
                 stripped
             )  # shlex erkennt Werte mit Leerzeichen in "" -> shell-artiges Parsing
             current_type = parts[0][2:].lower()  # "::typing" -> "typing"
+
+            if current_type not in StepType:
+                raise ParseError(
+                    f"This Step Type is not allowed: {current_type} at step {order}"
+                )
+
             attributes = {}
 
             for part in parts[1:]:
@@ -60,9 +67,6 @@ def parse_steps(body: str) -> list[Step]:
 
         else:
             content_lines.append(line)
-
-    if current_type is not None:
-        raise ValueError(f"Unclosed block '::{current_type}' at step {order}")
 
     return steps
 

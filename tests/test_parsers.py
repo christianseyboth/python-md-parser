@@ -1,3 +1,4 @@
+from error_classes import ParseError
 from techroot_lesson_parser.models import Chapter, Lesson, Step, StepType, ValidatorType
 from techroot_lesson_parser.parser import (
     parse_chapter,
@@ -5,6 +6,7 @@ from techroot_lesson_parser.parser import (
     parse_steps,
     split_frontmatter,
 )
+import pytest
 
 
 def test_parser_chapter():
@@ -148,3 +150,11 @@ def test_parse_lesson():
                 ),
             ],
         )
+
+
+def test_parse_error():
+    with open("tests/fixtures/invalid/lesson.md") as f:
+        content = f.read()
+
+        with pytest.raises(ParseError):
+            parse_lesson(content)
