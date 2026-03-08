@@ -1,15 +1,9 @@
 import yaml
 import shlex
-from techroot_lesson_parser.models import Chapter, Step, StepType, ValidatorType
+from techroot_lesson_parser.models import Chapter, Lesson, Step, StepType, ValidatorType
 
 
 ATTR_TYPES = {"wpm_goal": int, "estimated_minutes": int, "validator": ValidatorType}
-
-
-def parse_chapter(path: str) -> Chapter:
-    with open(path) as f:
-        obj = yaml.safe_load(f)
-        return Chapter(**obj)
 
 
 def split_frontmatter(content: str) -> tuple[dict, str]:
@@ -48,9 +42,6 @@ def parse_steps(body: str) -> list[Step]:
                         value = ATTR_TYPES[key](value)
                     attributes[key] = value
 
-            if current_type is not None:
-                raise ValueError(f"Unclosed block '::{current_type}' at step {order}")
-
             current_attrs = attributes
             content_lines = []
 
@@ -70,4 +61,22 @@ def parse_steps(body: str) -> list[Step]:
         else:
             content_lines.append(line)
 
+    if current_type is not None:
+        raise ValueError(f"Unclosed block '::{current_type}' at step {order}")
+
     return steps
+
+
+# Create Chapter
+def parse_chapter(path: str) -> Chapter:
+    with open(path) as f:
+        obj = yaml.safe_load(f)
+        return Chapter(**obj)
+
+
+# Create Lesson Object
+def parse_lesson(content: str) -> Lesson:
+    frontmatter, body = split_frontmatter(content)
+    steps = parse_steps(body)
+
+    return Lesson(**frontmatter, steps=steps)
