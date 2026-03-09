@@ -1,7 +1,5 @@
-from turtle import title
-from error_classes import SeverityType, ValidationError
+from techroot_lesson_parser.error_classes import SeverityType, ValidationError
 from techroot_lesson_parser.models import Lesson, StepType, ValidatorType
-from techroot_lesson_parser.parser import parse_lesson
 import re
 
 
@@ -109,11 +107,3 @@ def lesson_validator(obj: Lesson) -> list[ValidationError]:
                 )
 
     return val_errs
-
-
-file = open("tests/fixtures/invalid/lesson.md")
-content = file.read()
-
-result = parse_lesson(content)
-
-print(lesson_validator(result))

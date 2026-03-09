@@ -9,7 +9,7 @@ story:
   narrative: "The screen flickers. A cursor blinks."
 ---
 
-::text
+::foo
 Every system starts with a blinking cursor.
 This is where your journey begins.
 ::
