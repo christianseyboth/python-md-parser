@@ -98,7 +98,7 @@ def lesson_validator(obj: Lesson) -> list[ValidationError]:
                         )
                     )
 
-                # wpm-goal
+            # wpm-goal
             if step.wpm_goal is not None and step.wpm_goal <= 0:
                 val_errs.append(
                     ValidationError(
