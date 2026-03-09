@@ -1,6 +1,6 @@
 ---
-id: "first-command"
-title: "Your First Command"
+id: "sadds"
+title: "sdf"
 estimated_minutes: 5
 prerequisites: []
 story:
@@ -9,7 +9,7 @@ story:
   narrative: "The screen flickers. A cursor blinks."
 ---
 
-::foo
+::text
 Every system starts with a blinking cursor.
 This is where your journey begins.
 ::
