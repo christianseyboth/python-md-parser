@@ -5,7 +5,7 @@ from techroot_lesson_parser.error_classes import SeverityType, ValidationError
 
 def test_builder_has_valid_path(tmp_path):
     result = lesson_builder(
-        "tests/fixtures/valid/tier-1-interface/01-first-command/lesson.md",
+        "tests/fixtures/valid/tier-1-interface/terminal-basics/01-first-command/lesson.md",
         str(tmp_path),
     )
 

@@ -1,7 +1,6 @@
 from dataclasses import dataclass, field
 from enum import Enum
 
-
 """ Dataclasses and types for the parser-function
     of creating chapter / step / lessons output
                                                 """
@@ -56,13 +55,6 @@ class Chapter:
 
 
 @dataclass
-class Tier:
-    tier: int
-    title: str
-    chapters: list[Chapter] = field(default_factory=list)
-
-
-@dataclass
 class TierStats:
     total_lessons: int
     total_estimated_minutes: int
@@ -70,7 +62,15 @@ class TierStats:
 
 
 @dataclass
+class Tier:
+    tier: int
+    title: str
+    chapters: list[Chapter] = field(default_factory=list)
+
+
+@dataclass
 class Manifest:
     version: str
     generated_at: str
     tiers: list[Tier] = field(default_factory=list)
+    stats: dict[TierStats] = field(default_factory=dict)
