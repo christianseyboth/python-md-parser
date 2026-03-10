@@ -1,6 +1,6 @@
 from dataclasses import dataclass, field
 from enum import Enum
-from pydoc import text
+
 
 """ Dataclasses and types for the parser-function
     of creating chapter / step / lessons output
@@ -53,3 +53,24 @@ class Chapter:
     tier: int
     description: str
     lessons: list[Lesson] = field(default_factory=list)
+
+
+@dataclass
+class Tier:
+    tier: int
+    title: str
+    chapters: list[Chapter] = field(default_factory=list)
+
+
+@dataclass
+class TierStats:
+    total_lessons: int
+    total_estimated_minutes: int
+    lessons_with_story: int
+
+
+@dataclass
+class Manifest:
+    version: str
+    generated_at: str
+    tiers: list[Tier] = field(default_factory=list)
