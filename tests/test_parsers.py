@@ -1,4 +1,6 @@
-from error_classes import ParseError
+import pytest
+
+from techroot_lesson_parser.error_classes import ParseError
 from techroot_lesson_parser.models import Chapter, Lesson, Step, StepType, ValidatorType
 from techroot_lesson_parser.parser import (
     parse_chapter,
@@ -6,7 +8,6 @@ from techroot_lesson_parser.parser import (
     parse_steps,
     split_frontmatter,
 )
-import pytest
 
 
 def test_parser_chapter():

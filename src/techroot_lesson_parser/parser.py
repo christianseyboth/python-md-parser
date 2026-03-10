@@ -1,6 +1,6 @@
 import yaml
 import shlex
-from error_classes import ParseError
+from techroot_lesson_parser.error_classes import ParseError
 from techroot_lesson_parser.models import Chapter, Lesson, Step, StepType, ValidatorType
 
 
