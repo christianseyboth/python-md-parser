@@ -19,6 +19,7 @@ class ValidatorType(Enum):
     REGEX = "regex"
 
 
+# Parser Dataclasses
 @dataclass
 class Lesson:
     id: str
@@ -55,22 +56,47 @@ class Chapter:
 
 
 @dataclass
-class TierStats:
-    total_lessons: int
-    total_estimated_minutes: int
-    lessons_with_story: int
-
-
-@dataclass
 class Tier:
     tier: int
     title: str
     chapters: list[Chapter] = field(default_factory=list)
 
 
+## Manifest Dataclasses
+@dataclass
+class ManifestStats:
+    total_lessons: int
+    total_estimated_minutes: int
+    lessons_with_story: int
+
+
+@dataclass
+class ManifestLesson:
+    id: str
+    title: str
+    order: int
+    estimated_minutes: int
+    has_story: bool
+
+
+@dataclass
+class ManifestChapter:
+    id: str
+    title: str
+    description: str
+    lessons: list[ManifestLesson] = field(default_factory=list)
+
+
+@dataclass
+class ManifestTier:
+    tier: int
+    title: str
+    chapters: list[ManifestChapter] = field(default_factory=list)
+
+
 @dataclass
 class Manifest:
     version: str
     generated_at: str
-    tiers: list[Tier] = field(default_factory=list)
-    stats: dict[TierStats] = field(default_factory=dict)
+    stats: ManifestStats
+    tiers: list[ManifestTier] = field(default_factory=list)
