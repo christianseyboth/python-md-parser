@@ -37,6 +37,3 @@ def create_content_tree(content_root: str) -> list[Tier]:
 
         tiers.append(tier)
     return tiers
-
-
-print(create_content_tree("tests/fixtures/valid"))

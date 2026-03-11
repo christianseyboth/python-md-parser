@@ -12,7 +12,7 @@ from techroot_lesson_parser.parser import (
 
 def test_parser_chapter():
     result = parse_chapter(
-        "tests/fixtures/valid/tier-1-interface/terminal-basics/_chapter.yaml"
+        "tests/fixtures/valid/tier-1-interface/01-terminal-basics/_chapter.yaml"
     )
 
     assert result == Chapter(
@@ -26,7 +26,7 @@ def test_parser_chapter():
 def test_parse_steps():
 
     with open(
-        "tests/fixtures/valid/tier-1-interface/terminal-basics/01-first-command/lesson.md"
+        "tests/fixtures/valid/tier-1-interface/01-terminal-basics/01-first-command/lesson.md"
     ) as f:
         content = f.read()
         frontmatter, body = split_frontmatter(content)
@@ -88,7 +88,7 @@ def test_parse_steps():
 
 def test_parse_lesson():
     with open(
-        "tests/fixtures/valid/tier-1-interface/terminal-basics/01-first-command/lesson.md"
+        "tests/fixtures/valid/tier-1-interface/01-terminal-basics/01-first-command/lesson.md"
     ) as f:
         content = f.read()
 
