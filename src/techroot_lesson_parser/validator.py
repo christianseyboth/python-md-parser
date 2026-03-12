@@ -1,6 +1,7 @@
-from techroot_lesson_parser.error_classes import SeverityType, ValidationError
-from techroot_lesson_parser.models import Lesson, StepType, ValidatorType
 import re
+
+from techroot_lesson_parser.error_classes import SeverityType, ValidationError
+from techroot_lesson_parser.models import Lesson, StepType, Tier, ValidatorType
 
 
 def lesson_validator(obj: Lesson) -> list[ValidationError]:
@@ -105,5 +106,44 @@ def lesson_validator(obj: Lesson) -> list[ValidationError]:
                         severity=SeverityType.ERROR,
                     )
                 )
+
+    return val_errs
+
+
+def build_prerequisite_graph(content_tree: list[Tier]) -> dict[str, list[str]]:
+    graph = {
+        lesson.id: lesson.prerequisites
+        for tier in content_tree
+        for chapter in tier.chapters
+        for lesson in chapter.lessons
+    }
+
+    return graph
+
+
+def detect_circular_dependencies(graph: dict[str, list[str]]) -> list[ValidationError]:
+    color = {node: "WHITE" for node in graph}
+    val_errs = []
+
+    def dfs(u):
+        color[u] = "GRAY"
+
+        for lesson in graph[u]:
+            if color[lesson] == "GRAY":
+                val_errs.append(
+                    ValidationError(
+                        message=f"Circular dependency detected: {u} -> {lesson}",
+                        source=f"lesson: {u}",
+                        severity=SeverityType.ERROR,
+                    )
+                )
+            if color[lesson] == "WHITE":
+                dfs(lesson)
+
+        color[u] = "BLACK"
+
+    for node in graph:
+        if color[node] == "WHITE":
+            dfs(node)
 
     return val_errs
