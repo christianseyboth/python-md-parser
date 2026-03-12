@@ -1,4 +1,10 @@
+import dataclasses
+import json
+import os
 from datetime import datetime
+from enum import Enum
+
+from techroot_lesson_parser.content_tree import create_content_tree
 from techroot_lesson_parser.models import (
     Manifest,
     ManifestChapter,
@@ -62,3 +68,14 @@ def create_manifest(content_tree: list[Tier]) -> Manifest:
         tiers=manifest_tiers,
     )
     return manifest
+
+
+def write_manifest(manifest: Manifest, output_folder: str):
+    json_output = json.dumps(
+        dataclasses.asdict(manifest),
+        default=lambda x: x.value if isinstance(x, Enum) else x,  # safe guard
+    )
+
+    os.makedirs(output_folder, exist_ok=True)
+    with open(os.path.join(output_folder, "manifest.json"), "w") as json_file:
+        json_file.write(json_output)
