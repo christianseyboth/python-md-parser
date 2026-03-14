@@ -1,8 +1,7 @@
-import pytest
-
 from techroot_lesson_parser.error_classes import SeverityType
 from techroot_lesson_parser.validator import (
     detect_circular_dependencies,
+    detect_orphaned_prerequisites,
 )
 
 
@@ -25,7 +24,6 @@ def test_detect_dependencies():
     }
 
     result = detect_circular_dependencies(graph)
-    print(result)
     assert any(e.severity == SeverityType.ERROR for e in result)
 
 
@@ -36,5 +34,8 @@ def test_detect_dependencies_key_error():
         "bash-basics": ["navigating-files"],
     }
 
-    with pytest.raises(KeyError):
-        detect_circular_dependencies(graph)
+    result = detect_orphaned_prerequisites(graph)
+
+    assert any(
+        "Orphan found" in e.message and e.severity == SeverityType.ERROR for e in result
+    )

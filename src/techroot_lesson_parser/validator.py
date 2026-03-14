@@ -147,3 +147,19 @@ def detect_circular_dependencies(graph: dict[str, list[str]]) -> list[Validation
             dfs(node)
 
     return val_errs
+
+
+def detect_orphaned_prerequisites(graph: dict[str, list[str]]) -> list[ValidationError]:
+    val_errs = []
+
+    for node, val in graph.items():
+        for lesson in val:
+            if lesson not in graph:
+                val_errs.append(
+                    ValidationError(
+                        message=f"Orphan found: {node} -> {lesson}",
+                        source=f"lesson: {lesson}",
+                        severity=SeverityType.ERROR,
+                    )
+                )
+    return val_errs
