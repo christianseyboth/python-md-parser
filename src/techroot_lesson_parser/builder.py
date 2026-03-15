@@ -13,6 +13,11 @@ from techroot_lesson_parser.validator import lesson_validator
 
 
 def lesson_builder(lesson_path: str, output_folder: str):
+    """Parse, validate and build a single lesson into JSON output.
+
+    Returns a list of `ValidationError`s. If any error‑level issues are present,
+    no JSON is written and the errors are returned to the caller.
+    """
 
     with open(lesson_path) as f:
         lesson_content = f.read()
@@ -31,11 +36,12 @@ def lesson_builder(lesson_path: str, output_folder: str):
         if any(e.severity == SeverityType.ERROR for e in val_errs):
             return val_errs
 
-        # HTML Creation in Steps
+        # Render markdown content for each step into HTML alongside the original markdown
         for step in lesson.steps:
             step.content_html = markdown.markdown(step.content_md)
 
-        # Write JSON
+        # Serialize lesson (including steps) to JSON.
+        # Enum values are converted to their `.value` for JSON compatibility.
         json_output = json.dumps(
             dataclasses.asdict(lesson),
             default=lambda x: x.value if isinstance(x, Enum) else x,

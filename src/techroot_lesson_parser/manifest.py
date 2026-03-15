@@ -16,7 +16,12 @@ from techroot_lesson_parser.models import (
 
 
 def create_manifest(content_tree: list[Tier]) -> Manifest:
-    manifest_tiers = []
+    """Create a manifest view over the full content tree.
+
+    This flattens rich `Tier` / `Chapter` / `Lesson` structures into a compact
+    summary with aggregate statistics for downstream consumers (e.g. frontends).
+    """
+    manifest_tiers: list[ManifestTier] = []
 
     for tier in content_tree:
         manifest_tier = ManifestTier(
@@ -31,6 +36,7 @@ def create_manifest(content_tree: list[Tier]) -> Manifest:
                         ManifestLesson(
                             id=lesson.id,
                             title=lesson.title,
+                            # Lessons are ordered by position inside their chapter folder
                             order=idx + 1,
                             estimated_minutes=lesson.estimated_minutes,
                             has_story=lesson.story is not None,
@@ -71,9 +77,11 @@ def create_manifest(content_tree: list[Tier]) -> Manifest:
 
 
 def write_manifest(manifest: Manifest, output_folder: str):
+    """Serialize a `Manifest` to `manifest.json` in the given folder."""
     json_output = json.dumps(
         dataclasses.asdict(manifest),
-        default=lambda x: x.value if isinstance(x, Enum) else x,  # safe guard
+        # Convert Enum values to their primitive representation for JSON
+        default=lambda x: x.value if isinstance(x, Enum) else x,
     )
 
     os.makedirs(output_folder, exist_ok=True)

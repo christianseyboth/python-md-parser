@@ -1,9 +1,7 @@
 from dataclasses import dataclass, field
 from enum import Enum
 
-""" Dataclasses and types for the parser-function
-    of creating chapter / step / lessons output
-                                                """
+"""Core dataclasses and enums representing lessons, steps, chapters and manifest."""
 
 
 class StepType(Enum):
@@ -22,6 +20,8 @@ class ValidatorType(Enum):
 # Parser Dataclasses
 @dataclass
 class Lesson:
+    """Single lesson as parsed from a markdown file."""
+
     id: str
     title: str
     estimated_minutes: int
@@ -32,6 +32,8 @@ class Lesson:
 
 @dataclass
 class Step:
+    """Single step within a lesson, with both markdown and rendered HTML content."""
+
     type: StepType
     order: int
     content_md: str
@@ -48,6 +50,8 @@ class Step:
 
 @dataclass
 class Chapter:
+    """Logical grouping of lessons within a tier."""
+
     id: str
     title: str
     tier: int
@@ -57,12 +61,13 @@ class Chapter:
 
 @dataclass
 class Tier:
+    """Top‑level container that groups chapters by difficulty or progression level."""
+
     tier: int
     title: str
     chapters: list[Chapter] = field(default_factory=list)
 
 
-## Manifest Dataclasses
 @dataclass
 class ManifestStats:
     total_lessons: int

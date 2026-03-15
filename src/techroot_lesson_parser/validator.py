@@ -5,7 +5,8 @@ from techroot_lesson_parser.models import Lesson, StepType, Tier, ValidatorType
 
 
 def lesson_validator(obj: Lesson) -> list[ValidationError]:
-    val_errs = []
+    """Validate a parsed `Lesson` and return a list of `ValidationError`s."""
+    val_errs: list[ValidationError] = []
 
     # Frontmatter Validation
     if not isinstance(obj.id, str) or len(obj.id) == 0:
@@ -111,6 +112,7 @@ def lesson_validator(obj: Lesson) -> list[ValidationError]:
 
 
 def build_prerequisite_graph(content_tree: list[Tier]) -> dict[str, list[str]]:
+    """Build a mapping from lesson id to its list of prerequisite ids."""
     graph = {
         lesson.id: lesson.prerequisites
         for tier in content_tree
@@ -122,10 +124,12 @@ def build_prerequisite_graph(content_tree: list[Tier]) -> dict[str, list[str]]:
 
 
 def detect_circular_dependencies(graph: dict[str, list[str]]) -> list[ValidationError]:
+    """Run a DFS over the prerequisite graph to detect cycles."""
+    # Classic DFS color marking: WHITE = unvisited, GRAY = in stack, BLACK = done
     color = {node: "WHITE" for node in graph}
-    val_errs = []
+    val_errs: list[ValidationError] = []
 
-    def dfs(u):
+    def dfs(u: str):
         color[u] = "GRAY"
 
         for lesson in graph[u]:
@@ -150,7 +154,8 @@ def detect_circular_dependencies(graph: dict[str, list[str]]) -> list[Validation
 
 
 def detect_orphaned_prerequisites(graph: dict[str, list[str]]) -> list[ValidationError]:
-    val_errs = []
+    """Flag prerequisites that point to non‑existent lessons."""
+    val_errs: list[ValidationError] = []
 
     for node, val in graph.items():
         for lesson in val:

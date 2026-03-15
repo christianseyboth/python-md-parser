@@ -6,7 +6,21 @@ from techroot_lesson_parser.parser import parse_chapter, parse_lesson
 
 
 def create_content_tree(content_root: str) -> list[Tier]:
-    tiers = []
+    """Walk the content directory tree and construct `Tier`/`Chapter`/`Lesson` objects.
+
+    Expected layout:
+      content_root/
+        tier-1/
+          01-chapter-name/
+            _chapter.yaml
+            01-lesson-name/
+              lesson.md
+            02-another-lesson/
+              lesson.md
+        tier-2/
+          ...
+    """
+    tiers: list[Tier] = []
     tier_folders = sorted(
         [path for path in Path(content_root).glob("tier*") if path.is_dir()],
         key=lambda x: int(x.name.split("-")[1]),
